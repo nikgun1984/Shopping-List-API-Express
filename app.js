@@ -3,10 +3,9 @@ const ExpressError = require('./expressError');
 const itemsRoutes = require('./itemsRoutes');
 
 const app = express();
+app.use(express.json());
 
 app.use("/items", itemsRoutes);
-
-app.use(express.json());
 
 app.get('/favicon.ico', (req,res) => res.sendStatus(204));
 
