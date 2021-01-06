@@ -1,5 +1,4 @@
 const express = require('express');
-const ExpressError = require('./expressError');
 const itemsRoutes = require('./itemsRoutes');
 
 const app = express();
@@ -20,6 +19,4 @@ app.use(function(err,req,res,next){
     })
 });
 
-app.listen(3000, function(){
-    console.log("The Server is now running...")
-})
+module.exports = app;
