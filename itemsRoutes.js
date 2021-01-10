@@ -15,8 +15,8 @@ router.get('/', (req, res) => {
 /* Create item and add it to the shopping list ✍🏻*/
 router.post('/', function (req, res) {
   let newId = items.length ? items[items.length - 1].id + 1 : 1;
+  console.log('In here');
   const newItem = Object.assign({ id: newId }, req.body);
-
   items.push(newItem);
   datastore.writeDataToDataStore(
     res.status(201).json({

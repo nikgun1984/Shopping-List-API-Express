@@ -4,6 +4,7 @@ class DataStore {
   constructor(database) {
     this.database = database;
     this.items = this.getData();
+    this.time = new Date().toISOString();
   }
 
   getData() {
@@ -12,13 +13,17 @@ class DataStore {
   }
 
   writeDataToDataStore(status) {
-    fs.writeFile(this.database, JSON.stringify(this.items), (err) => {
-      status;
-    });
+    fs.writeFile(
+      this.database,
+      JSON.stringify(this.items, this.time),
+      (err) => {
+        status;
+      }
+    );
   }
 
   emptyDataStore() {
-    fs.writeFileSync(this.database,'');
+    fs.writeFileSync(this.database, '');
   }
 }
 
