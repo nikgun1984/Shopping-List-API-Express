@@ -7,7 +7,7 @@ const app = require('./app');
 
 let items = datastore.items;
 
-let item = { id: 1, name: 'pickles', price: 3.5 };
+let item = { id: 1, product: 'pickles', amount: 3.5 };
 
 afterEach(() => {
   items.length = 0;
@@ -30,43 +30,43 @@ describe('POST /items', () => {
   test('Creating an item', async () => {
     const res = await request(app)
       .post('/items')
-      .send({ name: 'tomatoes', price: 3.5 });
+      .send({ product: 'tomatoes', amount: 3.5 });
     expect(res.statusCode).toBe(201);
     expect(res.body.items).toEqual({
-      item: { id: 1, name: 'tomatoes', price: 3.5 },
+      item: { id: 1, product: 'tomatoes', amount: 3.5 },
     });
   });
 });
 
-describe('PATCH /items/:name', () => {
+describe('PATCH /items/:id', () => {
   beforeEach(() => {
     items.push(item);
     datastore.writeDataToDataStore();
   });
   test('Updating an item', async () => {
     const res = await request(app)
-      .patch(`/items/${item.name}`)
-      .send({ name: 'kosher pickles' });
+      .patch(`/items/${item.id}`)
+      .send({ product: 'kosher pickles' });
     expect(res.statusCode).toBe(200);
     expect(res.body.items).toEqual({
-      item: { id: 1, name: 'kosher pickles', price: 3.5 },
+      item: { id: 1, product: 'kosher pickles', amount: 3.5 },
     });
   });
   test('Responds with 404 for invalid name', async () => {
     const res = await request(app)
-      .patch(`/items/apples`)
-      .send({ name: 'gala apples' });
+      .patch(`/items/2000`)
+      .send({ product: 'gala apples' });
     expect(res.statusCode).toBe(404);
   });
 });
 
-describe('DELETE /items/:name', () => {
+describe('DELETE /items/:id', () => {
   beforeEach(() => {
     items.push(item);
     datastore.writeDataToDataStore();
   });
   test('Deleted an item', async () => {
-    const res = await request(app).delete(`/items/${item.name}`);
+    const res = await request(app).delete(`/items/${item.id}`);
     expect(res.statusCode).toBe(200);
     expect(res.body).toEqual({
       status: 'success',
@@ -75,8 +75,8 @@ describe('DELETE /items/:name', () => {
   });
   test('Responds with 404 for invalid name', async () => {
     const res = await request(app)
-      .patch(`/items/apples`)
-      .send({ name: 'gala apples' });
+      .patch(`/items/0`)
+      .send({ product: 'gala apples' });
     expect(res.statusCode).toBe(404);
   });
 });

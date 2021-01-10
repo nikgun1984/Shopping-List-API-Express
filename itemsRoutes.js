@@ -15,7 +15,7 @@ router.get('/', (req, res) => {
 /* Create item and add it to the shopping list ✍🏻*/
 router.post('/', function (req, res) {
   let newId = items.length ? items[items.length - 1].id + 1 : 1;
-  console.log('In here');
+  console.log(req.body);
   const newItem = Object.assign({ id: newId }, req.body);
   items.push(newItem);
   datastore.writeDataToDataStore(
@@ -38,16 +38,17 @@ router.get('/:name', (req, res) => {
 });
 
 /* Update some fields of a queried item */
-router.patch('/:name', (req, res) => {
-  const item = items.find((item) => item.name === req.params.name);
+router.patch('/:id', (req, res) => {
+  const id = parseInt(req.params.id);
+  const item = items.find((item) => item.id === id);
   if (!item) {
     throw new ExpressError('Cannot find the item', 404);
   }
-  if (req.body.name) {
-    item.name = req.body.name;
+  if (req.body.product) {
+    item.product = req.body.product;
   }
-  if (req.body.price) {
-    item.price = req.body.price;
+  if (req.body.amount) {
+    item.amount = req.body.amount;
   }
   datastore.writeDataToDataStore(
     res.status(200).json({
@@ -61,8 +62,9 @@ router.patch('/:name', (req, res) => {
 });
 
 /* Delete a specific item from database 🗑*/
-router.delete('/:name', (req, res) => {
-  const item = items.find((item) => item.name === req.params.name);
+router.delete('/:id', (req, res) => {
+  const id = parseInt(req.params.id);
+  const item = items.find((item) => item.id === id);
   if (!item) {
     throw new ExpressError('Cannot find the item', 404);
   }
